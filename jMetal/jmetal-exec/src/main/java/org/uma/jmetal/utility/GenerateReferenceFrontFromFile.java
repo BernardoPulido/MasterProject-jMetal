@@ -34,6 +34,9 @@ public class GenerateReferenceFrontFromFile {
       throw new JMetalException("Wrong number of arguments: two file names are required.");
     }
 
+    /**
+     * TODO: Correr algoritmos en repetidas ocasiones para generar un frente aproximado de Pareto
+     */
     String inputFileName = args[0] ;
     String outputFileName = args[1] ;
 
