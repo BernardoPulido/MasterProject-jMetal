@@ -57,6 +57,7 @@ public class MOCellThesis extends AbstractAlgorithmRunner {
     }
 
     problem = new VehicleRouting("/tspInstances/vrp.txt");
+    //problem = new VehicleRouting("/tspInstances/kroA100.tsp", "/tspInstances/kroB100.tsp");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;

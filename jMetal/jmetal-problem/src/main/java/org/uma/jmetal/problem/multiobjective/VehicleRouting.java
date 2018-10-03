@@ -3,6 +3,7 @@ package org.uma.jmetal.problem.multiobjective;
 
 import org.uma.jmetal.problem.impl.AbstractIntegerPermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
+import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.JMetalException;
 
 import java.io.*;
@@ -19,8 +20,8 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
   protected double [][] distanceMatrix ;
   protected double [][] costMatrix;
   protected int [][] adjacenciasMatrix;
-  protected int init_node = 0;
-  protected int destine_node = 24;
+  protected int init_node = 6;
+  protected int destine_node = 18;
 
   public VehicleRouting(String distanceFile) throws IOException {
     readProblem(distanceFile);
@@ -28,8 +29,20 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
     //imprimirMatrices();
     setNumberOfVariables(numberOfCities);
     setNumberOfObjectives(2);
-    setName("MultiobjectiveVRP");
+    setName("VRP");
   }
+
+  public VehicleRouting(String distanceFile, String costFile) throws IOException {
+    distanceMatrix = readProblemGrafoCompleto(distanceFile) ;
+    costMatrix     = readProblemGrafoCompleto(costFile);
+    this.adjacenciasMatrix = new int[numberOfCities][numberOfCities];
+    llenarConUnos();
+
+    setNumberOfVariables(numberOfCities);
+    setNumberOfObjectives(2);
+    setName("VRP");
+  }
+
 
   private void llenarConCeros() {
     for(int i=0; i<this.numberOfCities;i++){
@@ -40,8 +53,18 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
       }
     }
   }
+  private void llenarConUnos() {
+    for(int i=0; i<this.numberOfCities;i++){
+      for(int j=0; j<this.numberOfCities;j++){
+
+          adjacenciasMatrix[i][j]=1;
+
+      }
+    }
+  }
 
   public void imprimirMatrices(){
+
     for(int i=0; i<this.distanceMatrix.length;i++){
       for(int j=0; j<this.distanceMatrix.length;j++){
           System.out.print(""+this.adjacenciasMatrix[i][j]+" ");
@@ -59,17 +82,10 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
     fitness2 = 0.0 ;
 
     ArrayList<Integer> nodes_visitados = new ArrayList<Integer>();
-
-    for(int i=0; i<this.numberOfCities;i++){
-      System.out.print(solution.getVariableValue(i)+" ");
-    }
-    System.out.println();
-
     int current_node = init_node;
 
-    while(current_node!=destine_node){
 
-      System.out.println(current_node+" Current node");
+    while(current_node!=destine_node){
       int max=-1;
       int pos_max=current_node;
       for(int i=0; i<this.numberOfCities;i++){
@@ -86,10 +102,8 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
         nodes_visitados.add(current_node);
         current_node=pos_max;
       }else{
-        System.err.println("El grafo no es conexo");
-        //System.exit(0);
-        fitness1+=1000;
-        fitness2+=1000;
+        fitness1+= Double.POSITIVE_INFINITY;
+        fitness2+= Double.POSITIVE_INFINITY;
         current_node=destine_node;
       }
     }
@@ -97,6 +111,80 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
     solution.setObjective(0, fitness1);
     solution.setObjective(1, fitness2);
   }
+
+  /**
+   * Esta función genera una matriz de costos, dadas las coordanadas de cada nodo.
+   * Utiliza una matriz de adyacencias llena (solo uno's)
+   */
+  private double [][] readProblemGrafoCompleto(String file) throws IOException {
+    double [][] matrix = null;
+
+
+    InputStream in = getClass().getResourceAsStream(file);
+    InputStreamReader isr = new InputStreamReader(in);
+    BufferedReader br = new BufferedReader(isr);
+
+    StreamTokenizer token = new StreamTokenizer(br);
+    try {
+      boolean found ;
+      found = false ;
+
+      token.nextToken();
+      while(!found) {
+        if ((token.sval != null) && ((token.sval.compareTo("DIMENSION") == 0)))
+          found = true ;
+        else
+          token.nextToken() ;
+      }
+
+      token.nextToken() ;
+      token.nextToken() ;
+
+      numberOfCities =  (int)token.nval ;
+
+      matrix = new double[numberOfCities][numberOfCities] ;
+
+
+      // Find the string SECTION
+      found = false ;
+      token.nextToken();
+      while(!found) {
+        if ((token.sval != null) &&
+                ((token.sval.compareTo("SECTION") == 0)))
+          found = true ;
+        else
+          token.nextToken() ;
+      }
+
+      double [] c = new double[2*numberOfCities] ;
+
+      for (int i = 0; i < numberOfCities; i++) {
+        token.nextToken() ;
+        int j = (int)token.nval ;
+
+        token.nextToken() ;
+        c[2*(j-1)] = token.nval ;
+        token.nextToken() ;
+        c[2*(j-1)+1] = token.nval ;
+      } // for
+
+      double dist ;
+      for (int k = 0; k < numberOfCities; k++) {
+        matrix[k][k] = 0;
+        for (int j = k + 1; j < numberOfCities; j++) {
+          dist = Math.sqrt(Math.pow((c[k*2]-c[j*2]),2.0) +
+                  Math.pow((c[k*2+1]-c[j*2+1]), 2));
+          dist = (int)(dist + .5);
+          matrix[k][j] = dist;
+          matrix[j][k] = dist;
+        }
+      }
+    } catch (Exception e) {
+      new JMetalException("TSP.readProblem(): error when reading data file " + e);
+    }
+    return matrix;
+  }
+
 
   private void readProblem(String file) throws IOException {
     int [][] matrix = null;
