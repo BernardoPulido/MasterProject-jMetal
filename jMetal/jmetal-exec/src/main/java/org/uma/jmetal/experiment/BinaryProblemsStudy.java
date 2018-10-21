@@ -61,10 +61,7 @@ public class BinaryProblemsStudy {
   private static final int INDEPENDENT_RUNS = 25;
 
   public static void main(String[] args) throws IOException {
-    if (args.length != 1) {
-      throw new JMetalException("Needed arguments: experimentBaseDirectory");
-    }
-    String experimentBaseDirectory = args[0];
+    String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<BinarySolution>> problemList = new ArrayList<>();
     problemList.add(new ExperimentProblem<>(new ZDT5()));
