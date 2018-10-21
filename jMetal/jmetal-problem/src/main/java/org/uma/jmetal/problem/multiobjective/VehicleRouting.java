@@ -20,7 +20,7 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
   protected double [][] distanceMatrix ;
   protected double [][] costMatrix;
   protected int [][] adjacenciasMatrix;
-  protected int init_node = 6;
+  protected int init_node = 1;
   protected int destine_node = 18;
 
   public VehicleRouting(String distanceFile) throws IOException {
@@ -67,7 +67,7 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
 
     for(int i=0; i<this.distanceMatrix.length;i++){
       for(int j=0; j<this.distanceMatrix.length;j++){
-          System.out.print(""+this.adjacenciasMatrix[i][j]+" ");
+          System.out.print(""+this.distanceMatrix[i][j]+" ");
       }
       System.out.println();
     }
