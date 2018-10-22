@@ -13,3 +13,6 @@ points(c, col="green", pch=1, add =TRUE)
 
 legend(140, 90, legend=c("Frente aproximado de Pareto", "MOCell", "NSGAII"),
        col=c("red", "blue", "green"), pch = c(17,1,1), cex=0.9)
+
+abline(v=94, col=c("red"), lty=c(3), lwd=c(2))
+abline(h=49, col=c("red"), lty=c(3), lwd=c(2))
