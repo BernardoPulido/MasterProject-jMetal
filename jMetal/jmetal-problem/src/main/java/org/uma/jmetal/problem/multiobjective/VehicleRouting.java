@@ -21,7 +21,7 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
   protected double [][] costMatrix;
   protected int [][] adjacenciasMatrix;
   protected int init_node = 1;
-  protected int destine_node = 18;
+  protected int destine_node = 88;
 
   public VehicleRouting(String distanceFile) throws IOException {
     readProblem(distanceFile);

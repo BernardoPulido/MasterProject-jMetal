@@ -56,16 +56,16 @@ public class MOCellThesis extends AbstractAlgorithmRunner {
       //referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
     }
 
-    problem = new VehicleRouting("/tspInstances/vrp.txt");
+    problem = new VehicleRouting("/tspInstances/vrp100.txt");
     //problem = new VehicleRouting("/tspInstances/kroA100.tsp", "/tspInstances/kroB100.tsp");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
     crossover = new PMXCrossover(0.9) ;
 
-    double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
+   // double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    //double mutationProbability = 0.2 ; NSGAII
+    double mutationProbability = 0.2 ;
     mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
     selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());

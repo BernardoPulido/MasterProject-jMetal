@@ -58,7 +58,7 @@ public class VehicleRoutingStudy {
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting("/tspInstances/vrp.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting("/tspInstances/vrp100.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);
@@ -112,6 +112,35 @@ public class VehicleRoutingStudy {
         MutationOperator<PermutationSolution<Integer>> mutation;
         SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
+        double crossoverProbability = 0.9 ;
+        double crossoverDistributionIndex = 20.0 ;
+        crossover = new PMXCrossover(0.9) ;
+
+        //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
+        double mutationDistributionIndex = 20.0 ;
+        double mutationProbability = 0.2 ;
+        mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
+
+        selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
+
+        algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
+                .setSelectionOperator(selection)
+                .setMaxEvaluations(50000)
+                .setPopulationSize(100)
+                .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
+                .build() ;
+
+        algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
+      }
+
+      for (int i = 0; i < problemList.size(); i++) {
+
+        PermutationProblem<PermutationSolution<Integer>> problem = (PermutationProblem<PermutationSolution<Integer>>) problemList.get(i).getProblem();
+        Algorithm<List<PermutationSolution<Integer>>> algorithm;
+        CrossoverOperator<PermutationSolution<Integer>> crossover;
+        MutationOperator<PermutationSolution<Integer>> mutation;
+        SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
+
         crossover = new PMXCrossover(0.9) ;
 
         double mutationProbability = 0.2 ; //NSGAII
@@ -130,34 +159,7 @@ public class VehicleRoutingStudy {
         algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
       }
 
-      for (int i = 0; i < problemList.size(); i++) {
 
-        PermutationProblem<PermutationSolution<Integer>> problem = (PermutationProblem<PermutationSolution<Integer>>) problemList.get(i).getProblem();
-        Algorithm<List<PermutationSolution<Integer>>> algorithm;
-        CrossoverOperator<PermutationSolution<Integer>> crossover;
-        MutationOperator<PermutationSolution<Integer>> mutation;
-        SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
-
-        double crossoverProbability = 0.9 ;
-        double crossoverDistributionIndex = 20.0 ;
-        crossover = new PMXCrossover(0.9) ;
-
-        double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
-        double mutationDistributionIndex = 20.0 ;
-        //double mutationProbability = 0.2 ; NSGAII
-        mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
-
-        selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
-
-        algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
-                .setSelectionOperator(selection)
-                .setMaxEvaluations(50000)
-                .setPopulationSize(100)
-                .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
-                .build() ;
-
-        algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
-      }
     }
     return algorithms;
   }
