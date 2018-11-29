@@ -166,4 +166,5 @@ hs_err_pid*
 
 /jMetal/*.png
 
+/jMetal/experiments
 
