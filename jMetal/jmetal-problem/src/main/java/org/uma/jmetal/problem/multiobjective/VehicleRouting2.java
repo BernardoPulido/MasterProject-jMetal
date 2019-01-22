@@ -256,6 +256,7 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
 
         token.nextToken();
         int penalizacion = (int)token.nval;
+        //int penalizacion = (int) (Math.random() * 200) + 1;
 
         matrix[j-1][k-1] = 1;
         matrix[k-1][j-1] = 1;
