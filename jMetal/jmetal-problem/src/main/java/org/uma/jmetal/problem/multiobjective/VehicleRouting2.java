@@ -256,17 +256,18 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
 
         token.nextToken();
         int penalizacion = (int)token.nval;
-        //int penalizacion = (int) (Math.random() * 200) + 1;
 
-        matrix[j-1][k-1] = 1;
-        matrix[k-1][j-1] = 1;
+        //if(matrix[j-1][k-1]!=1){
+          matrix[j-1][k-1] = 1;
+          matrix_distancias[j-1][k-1]= distancia;
+          matrix_penalizacion[j-1][k-1]= penalizacion;
+        //}
 
-        matrix_distancias[j-1][k-1]= distancia;
-        matrix_distancias[k-1][j-1] = distancia;
-
-        matrix_penalizacion[j-1][k-1]= penalizacion;
-        matrix_penalizacion[k-1][j-1] = penalizacion;
-
+        //if(matrix[k-1][j-1]!=1){
+          matrix[k-1][j-1] = 1;
+          matrix_distancias[k-1][j-1] = distancia;
+          matrix_penalizacion[k-1][j-1] = penalizacion;
+        //}
       }
 
       // Buscar VEHICLES

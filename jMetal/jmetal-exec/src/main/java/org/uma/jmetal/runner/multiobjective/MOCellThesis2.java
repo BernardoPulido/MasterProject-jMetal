@@ -6,6 +6,7 @@ import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
+import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
@@ -61,13 +62,13 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
     }
 
     problem = new VehicleRouting2("/tspInstances/vrp100.txt");
-    //problem = new VehicleRouting("/tspInstances/kroA100.tsp", "/tspInstances/kroB100.tsp");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
+    //crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
     crossover = new PMXCrossover(0.9) ;
 
-   // double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
+    //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
     double mutationProbability = 0.2 ;
     mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
@@ -76,7 +77,7 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
 
     algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
             .setSelectionOperator(selection)
-            .setMaxEvaluations(50000)
+            .setMaxEvaluations(500000)
             .setPopulationSize(100)
             .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
             .build() ;

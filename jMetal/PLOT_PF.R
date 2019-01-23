@@ -1,8 +1,8 @@
-setwd("C:/Users/luis_/Documents/GitHub/MasterProject-jMetal/jMetal/experiments/VehicleRoutingStudy/referenceFronts")
+setwd("C:/Users/luisb/Documents/GitHub/MasterProject-jMetal/jMetal/experiments/VehicleRoutingStudy/referenceFronts")
 a <- read.table("VRP.pf")
 plot(a,lwd=1, xlab="Distancia", pch=17, col="red", ylab="Penalización ambiental", las=1, panel.first=grid())
 
-setwd("C:/Users/luis_/Documents/GitHub/MasterProject-jMetal/jMetal/results")
+setwd("C:/Users/luisb/Documents/GitHub/MasterProject-jMetal/jMetal/results")
 b <- read.table("FUN_MOCell.tsv")
 points(b, col="blue", lwd=2, pch=1, add =TRUE)
 

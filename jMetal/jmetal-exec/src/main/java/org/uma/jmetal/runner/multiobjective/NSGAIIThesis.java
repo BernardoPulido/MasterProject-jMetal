@@ -62,9 +62,9 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
 
     problem = new VehicleRouting("/tspInstances/vrp100.txt");
 
-    crossover = new PMXCrossover(0.9) ;
+    crossover = new PMXCrossover(0.5) ;
 
-    double mutationProbability = 0.2 ; //NSGAII
+    double mutationProbability = 0.1 ; //NSGAII
     //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
