@@ -10,6 +10,8 @@ import org.uma.jmetal.util.archive.BoundedArchive;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
+import org.uma.jmetal.util.fileoutput.SolutionListOutput;
+import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
 import org.uma.jmetal.util.neighborhood.Neighborhood;
 import org.uma.jmetal.util.solutionattribute.Ranking;
 import org.uma.jmetal.util.solutionattribute.impl.CrowdingDistance;
@@ -41,6 +43,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
   protected Comparator<S> dominanceComparator;
   protected LocationAttribute<S> location;
 
+  private int contador_interno = 0;
   /**
    * Constructor
    * @param problem
@@ -104,6 +107,13 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
       archive.add((S)solution.copy()) ;
     }
 
+    if(contador_interno==0){
+      contador_interno++;
+      new SolutionListOutput(population)
+              .setSeparator("\t")
+              .setFunFileOutputContext(new DefaultFileOutputContext("results/inicialMOCELL.tsv"))
+              .print();
+    }
     return population;
   }
 

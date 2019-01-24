@@ -11,6 +11,7 @@ import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.multiobjective.MultiobjectiveTSP;
 import org.uma.jmetal.problem.multiobjective.VehicleRouting;
+import org.uma.jmetal.problem.multiobjective.VehicleRouting2;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -56,11 +57,11 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
       problemName = args[0] ;
       referenceParetoFront = args[1] ;
     } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.VehicleRouting";
+      problemName = "org.uma.jmetal.problem.multiobjective.VehicleRouting2";
       //referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
     }
 
-    problem = new VehicleRouting("/tspInstances/vrp100.txt");
+    problem = new VehicleRouting2("/experiments/ol.txt");
 
     crossover = new PMXCrossover(0.5) ;
 

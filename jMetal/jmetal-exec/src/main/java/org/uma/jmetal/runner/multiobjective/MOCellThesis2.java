@@ -61,7 +61,7 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
       //referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
     }
 
-    problem = new VehicleRouting2("/tspInstances/vrp100.txt");
+    problem = new VehicleRouting2("/experiments/ol.txt");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;

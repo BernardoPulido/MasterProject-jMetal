@@ -10,6 +10,8 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
+import org.uma.jmetal.util.fileoutput.SolutionListOutput;
+import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,6 +29,7 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
   protected int evaluations;
   protected Comparator<S> dominanceComparator ;
 
+  protected int contador_interno = 0;
   /**
    * Constructor
    */
@@ -69,6 +72,13 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
   @Override protected List<S> evaluatePopulation(List<S> population) {
     population = evaluator.evaluate(population, getProblem());
 
+    if(contador_interno==0){
+      contador_interno++;
+      new SolutionListOutput(population)
+              .setSeparator("\t")
+              .setFunFileOutputContext(new DefaultFileOutputContext("results/inicialNSGAII.tsv"))
+              .print();
+    }
     return population;
   }
 
