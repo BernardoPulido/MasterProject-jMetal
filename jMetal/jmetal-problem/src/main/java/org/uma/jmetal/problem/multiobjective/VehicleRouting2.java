@@ -83,6 +83,7 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
         fitness2 = 0.0 ;
 
         ArrayList<Integer> nodes_visitados = new ArrayList<Integer>();
+        ArrayList<Integer> nodes_no_visitados = new ArrayList<Integer>();
         int current_node = init_node[0];
 
         while(current_node!=destine_node[0]){
@@ -90,7 +91,7 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
           int pos_max=current_node;
           for(int i=0; i<this.numberOfCities;i++){
             if(adjacenciasMatrix[current_node][i]==1){
-              if((max < solution.getVariableValue(i)) && (nodes_visitados.indexOf(i)==-1)){
+              if((max < solution.getVariableValue(i)) && (nodes_visitados.indexOf(i)==-1) && (nodes_no_visitados.indexOf(i)==-1)){
                 max= solution.getVariableValue(i);
                 pos_max = i;
               }
@@ -102,15 +103,25 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
             nodes_visitados.add(current_node);
             current_node=pos_max;
           }else{
-            fitness1+= Double.POSITIVE_INFINITY;
-            fitness2+= Double.POSITIVE_INFINITY;
-            current_node=destine_node[0];
+            //Recursión en decodificación de cromosoma
+            if(nodes_visitados.indexOf(current_node)==-1){
+              fitness1-=distanceMatrix[nodes_visitados.get(nodes_visitados.size()-1)][current_node];
+              fitness2-=costMatrix[nodes_visitados.get(nodes_visitados.size()-1)][current_node];
+              nodes_no_visitados.add(current_node);
+              current_node = nodes_visitados.get(nodes_visitados.size()-1);
+            }else{
+              nodes_no_visitados.add(current_node);
+              int por_eliminar = nodes_visitados.get(nodes_visitados.size()-1);
+              nodes_visitados.removeIf(i -> i == por_eliminar);
+              fitness1-=distanceMatrix[current_node][nodes_visitados.get(nodes_visitados.size()-1)];
+              fitness2-=costMatrix[current_node][nodes_visitados.get(nodes_visitados.size()-1)];
+              current_node = nodes_visitados.get(nodes_visitados.size()-1);
+            }
           }
         }
 
         solution.setObjective(0, fitness1);
         solution.setObjective(1, fitness2);
-
   }
 
   /**
