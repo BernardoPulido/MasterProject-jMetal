@@ -12,6 +12,7 @@ import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.problem.multiobjective.VehicleRouting;
+import org.uma.jmetal.problem.multiobjective.VehicleRouting2;
 import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.PermutationSolution;
@@ -58,7 +59,7 @@ public class VehicleRoutingStudy2 {
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting("/experiments/ol.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/ol.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);
