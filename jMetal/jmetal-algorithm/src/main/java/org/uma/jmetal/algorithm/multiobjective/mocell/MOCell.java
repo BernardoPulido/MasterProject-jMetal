@@ -6,6 +6,7 @@ import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.archive.BoundedArchive;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
@@ -18,6 +19,7 @@ import org.uma.jmetal.util.solutionattribute.impl.CrowdingDistance;
 import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 import org.uma.jmetal.util.solutionattribute.impl.LocationAttribute;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,6 +46,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
   protected LocationAttribute<S> location;
 
   private int contador_interno = 0;
+  private String referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
   /**
    * Constructor
    * @param problem
@@ -82,6 +85,11 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
   protected void updateProgress() {
     evaluations++;
     currentIndividual=(currentIndividual+1)%getMaxPopulationSize();
+    /*try{
+      AbstractAlgorithmRunner.printQualityIndicatorsE(getPopulation(), referenceParetoFront); ;
+    }catch (FileNotFoundException e){
+      e.printStackTrace();
+    }*/
   }
 
   @Override
