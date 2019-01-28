@@ -108,12 +108,18 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
     }
 
     if(contador_interno==0){
-      contador_interno++;
       new SolutionListOutput(population)
               .setSeparator("\t")
               .setFunFileOutputContext(new DefaultFileOutputContext("results/inicialMOCELL.tsv"))
               .print();
     }
+    if(contador_interno==this.maxEvaluations){
+      new SolutionListOutput(getPopulation())
+              .setSeparator("\t")
+              .setFunFileOutputContext(new DefaultFileOutputContext("results/finalMOCELL.tsv"))
+              .print();
+    }
+    contador_interno++;
     return population;
   }
 

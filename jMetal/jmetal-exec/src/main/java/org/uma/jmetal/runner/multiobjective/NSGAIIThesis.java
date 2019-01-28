@@ -56,7 +56,7 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
       referenceParetoFront = args[1] ;
     } else {
       problemName = "org.uma.jmetal.problem.multiobjective.VehicleRouting2";
-      //referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
+      referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
     }
 
     problem = new VehicleRouting2("/experiments/ol.txt");
@@ -99,5 +99,9 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
     JMetalLogger.logger.info("Random seed: " + JMetalRandom.getInstance().getSeed());
     JMetalLogger.logger.info("Objectives values have been written to file FUN_NSGAII.tsv");
     JMetalLogger.logger.info("Variables values have been written to file VAR_NSGAII.tsv");
+
+    if (!referenceParetoFront.equals("")) {
+      printQualityIndicators(population, referenceParetoFront) ;
+    }
   }
 }

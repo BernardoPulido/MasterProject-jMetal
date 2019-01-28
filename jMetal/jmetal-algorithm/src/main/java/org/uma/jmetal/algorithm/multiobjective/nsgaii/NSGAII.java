@@ -73,12 +73,18 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
     population = evaluator.evaluate(population, getProblem());
 
     if(contador_interno==0){
-      contador_interno++;
       new SolutionListOutput(population)
               .setSeparator("\t")
               .setFunFileOutputContext(new DefaultFileOutputContext("results/inicialNSGAII.tsv"))
               .print();
     }
+    if(contador_interno==(this.maxEvaluations/getMaxPopulationSize()-1)){
+      new SolutionListOutput(getPopulation())
+              .setSeparator("\t")
+              .setFunFileOutputContext(new DefaultFileOutputContext("results/finalNSGAII.tsv"))
+              .print();
+    }
+    contador_interno++;
     return population;
   }
 
