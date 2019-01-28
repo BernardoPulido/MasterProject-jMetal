@@ -59,7 +59,7 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
       referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
     }
 
-    problem = new VehicleRouting2("/experiments/vrp.txt");
+    problem = new VehicleRouting2("/experiments/vrp_temp.txt");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;

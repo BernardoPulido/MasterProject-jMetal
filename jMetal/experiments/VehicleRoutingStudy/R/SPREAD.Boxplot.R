@@ -12,8 +12,18 @@ fileNSGAII<-paste(fileNSGAII, problem, sep="/")
 fileNSGAII<-paste(fileNSGAII, indicator, sep="/")
 NSGAII<-scan(fileNSGAII)
 
-algs<-c("MOCell","NSGAII")
-boxplot(MOCell,NSGAII,names=algs, notch = FALSE)
+fileSPEA2<-paste(resultDirectory, "SPEA2", sep="/")
+fileSPEA2<-paste(fileSPEA2, problem, sep="/")
+fileSPEA2<-paste(fileSPEA2, indicator, sep="/")
+SPEA2<-scan(fileSPEA2)
+
+fileWASFGA<-paste(resultDirectory, "WASFGA", sep="/")
+fileWASFGA<-paste(fileWASFGA, problem, sep="/")
+fileWASFGA<-paste(fileWASFGA, indicator, sep="/")
+WASFGA<-scan(fileWASFGA)
+
+algs<-c("MOCell","NSGAII","SPEA2","WASFGA")
+boxplot(MOCell,NSGAII,SPEA2,WASFGA,names=algs, notch = FALSE)
 titulo <-paste(indicator, problem, sep=":")
 title(main=titulo)
 }

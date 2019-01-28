@@ -3,6 +3,8 @@ package org.uma.jmetal.experiment;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.mocell.MOCellBuilder;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
+import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
+import org.uma.jmetal.algorithm.multiobjective.wasfga.WASFGA;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -17,6 +19,7 @@ import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.archive.impl.CrowdingDistanceArchive;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.experiment.Experiment;
 import org.uma.jmetal.util.experiment.ExperimentBuilder;
 import org.uma.jmetal.util.experiment.component.*;
@@ -58,7 +61,7 @@ public class VehicleRoutingStudy2 {
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/ol.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/vrp_temp.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);
@@ -125,7 +128,7 @@ public class VehicleRoutingStudy2 {
 
         algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
-                .setMaxEvaluations(500000)
+                .setMaxEvaluations(50000)
                 .setPopulationSize(100)
                 .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
                 .build() ;
@@ -151,15 +154,64 @@ public class VehicleRoutingStudy2 {
 
         algorithm = new NSGAIIBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
-                //.setMaxEvaluations(10000)
-                .setMaxEvaluations(50000)
+                .setMaxEvaluations(10000)
                 .setPopulationSize(100)
                 .build() ;
 
         algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
       }
 
+      //SPEA II
+      for (int i = 0; i < problemList.size(); i++) {
+        PermutationProblem<PermutationSolution<Integer>> problem = (PermutationProblem<PermutationSolution<Integer>>) problemList.get(i).getProblem();
+        Algorithm<List<PermutationSolution<Integer>>> algorithm;
+        CrossoverOperator<PermutationSolution<Integer>> crossover;
+        MutationOperator<PermutationSolution<Integer>> mutation;
+        SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
+        crossover = new PMXCrossover(0.9) ;
+
+        double mutationProbability = 0.2 ;
+        //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
+        mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
+
+        selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
+
+        algorithm = new SPEA2Builder<>(problem, crossover, mutation)
+                .setSelectionOperator(selection)
+                .setMaxIterations(250)
+                .setPopulationSize(100)
+                .build() ;
+
+        algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
+      }
+
+      //WASFGA
+      for (int i = 0; i < problemList.size(); i++) {
+        PermutationProblem<PermutationSolution<Integer>> problem = (PermutationProblem<PermutationSolution<Integer>>) problemList.get(i).getProblem();
+        Algorithm<List<PermutationSolution<Integer>>> algorithm;
+        CrossoverOperator<PermutationSolution<Integer>> crossover;
+        MutationOperator<PermutationSolution<Integer>> mutation;
+        SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
+
+        crossover = new PMXCrossover(0.9) ;
+
+        double mutationProbability = 0.2 ;
+        mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
+
+        selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
+
+
+        double epsilon = 0.01 ;
+        List<Double> referencePoint = null;
+        referencePoint = new ArrayList<>();
+        referencePoint.add(0.0);
+        referencePoint.add(0.0);
+        algorithm = new WASFGA<PermutationSolution<Integer>>(problem, 100, 250, crossover, mutation, selection,
+                new SequentialSolutionListEvaluator<PermutationSolution<Integer>>(),epsilon, referencePoint) ;
+
+        algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
+      }
     }
     return algorithms;
   }

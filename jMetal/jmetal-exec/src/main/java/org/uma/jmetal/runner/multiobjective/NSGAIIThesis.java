@@ -59,11 +59,11 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
       referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
     }
 
-    problem = new VehicleRouting2("/experiments/ol.txt");
+    problem = new VehicleRouting2("/experiments/vrp_temp.txt");
 
-    crossover = new PMXCrossover(0.5) ;
+    crossover = new PMXCrossover(0.9) ;
 
-    double mutationProbability = 0.1 ; //NSGAII
+    double mutationProbability = 0.2 ; //NSGAII
     //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
@@ -78,8 +78,7 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
  */
     algorithm = new NSGAIIBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
             .setSelectionOperator(selection)
-            //.setMaxEvaluations(10000)
-            .setMaxEvaluations(50000)
+            .setMaxEvaluations(10000)
             .setPopulationSize(100)
             .build() ;
 

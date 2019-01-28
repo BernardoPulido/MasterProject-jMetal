@@ -74,23 +74,23 @@ latexTail <- function() {
 ### START OF SCRIPT 
 # Constants
 problemList <-c("VRP") 
-algorithmList <-c("MOCell", "NSGAII") 
-tabularString <-c("lc") 
-latexTableFirstLine <-c("\\hline  & NSGAII\\\\ ") 
+algorithmList <-c("MOCell", "NSGAII", "SPEA2", "WASFGA") 
+tabularString <-c("lccc") 
+latexTableFirstLine <-c("\\hline  & NSGAII & SPEA2 & WASFGA\\\\ ") 
 indicator<-"EP"
 
  # Step 1.  Writes the latex header
 latexHeader()
-tabularString <-c("| l | p{0.15cm } | ") 
+tabularString <-c("| l | p{0.15cm } | p{0.15cm } | p{0.15cm } | ") 
 
-latexTableFirstLine <-c("\\hline \\multicolumn{1}{|c|}{} & \\multicolumn{1}{c|}{NSGAII} \\\\") 
+latexTableFirstLine <-c("\\hline \\multicolumn{1}{|c|}{} & \\multicolumn{1}{c|}{NSGAII} & \\multicolumn{1}{c|}{SPEA2} & \\multicolumn{1}{c|}{WASFGA} \\\\") 
 
 # Step 3. Problem loop 
 latexTableHeader("VRP ", tabularString, latexTableFirstLine)
 
 indx = 0
 for (i in algorithmList) {
-  if (i != "NSGAII") {
+  if (i != "WASFGA") {
     write(i , "experiments/VehicleRoutingStudy/R/EP.Wilcoxon.tex", append=TRUE)
     write(" & ", "experiments/VehicleRoutingStudy/R/EP.Wilcoxon.tex", append=TRUE)
 
@@ -105,7 +105,7 @@ for (i in algorithmList) {
             write("  ", "experiments/VehicleRoutingStudy/R/EP.Wilcoxon.tex", append=TRUE)
           } 
           if (problem == "VRP") {
-            if (j == "NSGAII") {
+            if (j == "WASFGA") {
               write(" \\\\ ", "experiments/VehicleRoutingStudy/R/EP.Wilcoxon.tex", append=TRUE)
             } 
             else {
