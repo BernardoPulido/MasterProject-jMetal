@@ -1,6 +1,6 @@
 setwd("C:/Users/luisb/Documents/GitHub/MasterProject-jMetal/jMetal/experiments/VehicleRoutingStudy/referenceFronts")
 #setwd("C:/Users/luisb/Documents/GitHub/MasterProject-jMetal/jMetal/results")
-a <- read.table("VRP.pf")
+a <- read.table("VRP_temp.pf")
 
 setwd("C:/Users/luisb/Documents/GitHub/MasterProject-jMetal/jMetal/results")
 b <- read.table("inicialMOCELL_.tsv")
