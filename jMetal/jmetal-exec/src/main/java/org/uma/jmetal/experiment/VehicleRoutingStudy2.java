@@ -61,7 +61,7 @@ public class VehicleRoutingStudy2 {
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/vrp_temp.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/vrp_temp_costorelativo.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);

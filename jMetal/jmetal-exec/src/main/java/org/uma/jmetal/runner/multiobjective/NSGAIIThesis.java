@@ -59,7 +59,7 @@ public class NSGAIIThesis extends AbstractAlgorithmRunner {
       referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
     }
 
-    problem = new VehicleRouting2("/experiments/vrp_temp.txt");
+    problem = new VehicleRouting2("/experiments/vrp_temp_costorelativo.txt");
 
     crossover = new PMXCrossover(0.9) ;
 
