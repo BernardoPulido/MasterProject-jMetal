@@ -18,7 +18,7 @@ public class UtilidadesRelativeCosts {
     private double consumo_maximo = 0;
     private ArrayList<ArrayList<Double>> datos;
     private double factor =1;
-    private String file = "/experiments/vrp_temp.txt";
+    private String file = "/experiments/ol_temp.txt";
 
     /**
      * Método para generar un grafo fuertamente conexo, esto a partir de un conjunto de datos reales

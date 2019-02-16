@@ -14,26 +14,25 @@ import java.util.ArrayList;
  *   http://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/tsp/
  */
 @SuppressWarnings("serial")
-public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
+public class VehicleRouting3 extends AbstractIntegerPermutationProblem {
   protected int         numberOfCities ;
   protected double [][] distanceMatrix ;
   protected double [][] costMatrix;
-  protected double [][] combustibleMatrix;
   protected int [][] adjacenciasMatrix;
   protected int [] init_node;
   protected int [] destine_node;
   protected int cantidad_vehiculos = 0;
 
-  public VehicleRouting2(String distanceFile) throws IOException {
+  public VehicleRouting3(String distanceFile) throws IOException {
     readProblem(distanceFile);
     llenarConCeros();
     //imprimirMatrices();
     setNumberOfVariables(numberOfCities);
-    setNumberOfObjectives(3);
+    setNumberOfObjectives(2);
     setName("VRP");
   }
 
-  public VehicleRouting2(String distanceFile, String costFile) throws IOException {
+  public VehicleRouting3(String distanceFile, String costFile) throws IOException {
     distanceMatrix = readProblemGrafoCompleto(distanceFile) ;
     costMatrix     = readProblemGrafoCompleto(costFile);
     this.adjacenciasMatrix = new int[numberOfCities][numberOfCities];
@@ -79,11 +78,9 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
         //TO DO: Ciclo que recorra todos los vehículos, ya que se cuente con una representación que los soporte
         double fitness1   ;
         double fitness2   ;
-        double fitness3   ;
 
         fitness1 = 0.0 ;
         fitness2 = 0.0 ;
-        fitness3 = 0.0 ;
 
         ArrayList<Integer> nodes_visitados = new ArrayList<Integer>();
         ArrayList<Integer> nodes_no_visitados = new ArrayList<Integer>();
@@ -103,7 +100,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
           if(pos_max!=current_node){
             fitness1 +=distanceMatrix[current_node][pos_max];
             fitness2 +=costMatrix[current_node][pos_max];
-            fitness3 +=combustibleMatrix[current_node][pos_max];
             nodes_visitados.add(current_node);
             current_node=pos_max;
           }else{
@@ -111,7 +107,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
             if(nodes_visitados.indexOf(current_node)==-1){
               fitness1-=distanceMatrix[nodes_visitados.get(nodes_visitados.size()-1)][current_node];
               fitness2-=costMatrix[nodes_visitados.get(nodes_visitados.size()-1)][current_node];
-              fitness3-=combustibleMatrix[nodes_visitados.get(nodes_visitados.size()-1)][current_node];
               nodes_no_visitados.add(current_node);
               current_node = nodes_visitados.get(nodes_visitados.size()-1);
             }else{
@@ -120,7 +115,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
               nodes_visitados.removeIf(i -> i == por_eliminar);
               fitness1-=distanceMatrix[current_node][nodes_visitados.get(nodes_visitados.size()-1)];
               fitness2-=costMatrix[current_node][nodes_visitados.get(nodes_visitados.size()-1)];
-              fitness3-=combustibleMatrix[current_node][nodes_visitados.get(nodes_visitados.size()-1)];
               current_node = nodes_visitados.get(nodes_visitados.size()-1);
             }
           }
@@ -128,7 +122,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
 
         solution.setObjective(0, fitness1);
         solution.setObjective(1, fitness2);
-        solution.setObjective(2, fitness3);
   }
 
   /**
@@ -209,7 +202,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
     int [][] matrix = null;
     double [][] matrix_penalizacion = null;
     double [][] matrix_distancias = null;
-    double [][] matrix_combustible = null;
 
     InputStream in = getClass().getResourceAsStream(file);
     InputStreamReader isr = new InputStreamReader(in);
@@ -236,7 +228,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
       matrix = new int[numberOfCities][numberOfCities] ;
       matrix_penalizacion = new double[numberOfCities][numberOfCities] ;
       matrix_distancias = new double[numberOfCities][numberOfCities] ;
-      matrix_combustible = new double[numberOfCities][numberOfCities] ;
 
       //Find the string ARISTAS
       found = false ;
@@ -277,21 +268,16 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
         token.nextToken();
         int penalizacion = (int)token.nval;
 
-        token.nextToken();
-        int combustible = (int)token.nval;
-
         //if(matrix[j-1][k-1]!=1){
           matrix[j-1][k-1] = 1;
           matrix_distancias[j-1][k-1]= distancia;
           matrix_penalizacion[j-1][k-1]= penalizacion;
-          matrix_combustible[j-1][k-1]= combustible;
         //}
 
         //if(matrix[k-1][j-1]!=1){
           matrix[k-1][j-1] = 1;
           matrix_distancias[k-1][j-1] = distancia;
           matrix_penalizacion[k-1][j-1] = penalizacion;
-          matrix_combustible[k-1][j-1] = combustible;
         //}
       }
 
@@ -327,7 +313,6 @@ public class VehicleRouting2 extends AbstractIntegerPermutationProblem {
     this.adjacenciasMatrix = matrix;
     this.distanceMatrix=matrix_distancias;
     this.costMatrix=matrix_penalizacion;
-    this.combustibleMatrix=matrix_combustible;
   }
 
   @Override public int getPermutationLength() {

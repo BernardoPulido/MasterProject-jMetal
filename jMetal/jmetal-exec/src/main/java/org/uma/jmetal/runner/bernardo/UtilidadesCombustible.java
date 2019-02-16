@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Utilidades {
+public class UtilidadesCombustible {
     private int conexiones_por_nodo = 4;
     private int cantidad_de_nodos_deseado = 300;
     private int cantidad_nodos;
@@ -15,16 +15,10 @@ public class Utilidades {
     private double penalizacion_minima = 0;
     private double penalizacion_maxima = 0;
     private double consumo_minimo = 0;
-    private int cantidad_zonas=50;
-    private int bajo=50;
-    private int medio_bajo=40;
-    private int medio_alto=37;
-    private double alto=1.2;
-
     private double consumo_maximo = 0;
     private ArrayList<ArrayList<Double>> datos;
-    private ArrayList<Integer> zonas;
-    private String file = "/tspInstances/ol.txt";
+    private double factor =1;
+    private String file = "/experiments/ol_temp.txt";
 
     /**
      * Método para generar un grafo fuertamente conexo, esto a partir de un conjunto de datos reales
@@ -33,7 +27,6 @@ public class Utilidades {
         Random r = new Random();
         int contador =0;
         int contador2 =0;
-
         datos = new ArrayList<ArrayList<Double>>();
         leerArchivo();
         distancia_maxima = obtenerMaximos(2);
@@ -41,56 +34,10 @@ public class Utilidades {
         penalizacion_maxima = obtenerMaximos(3);
         penalizacion_minima = obtenerMinimos(3);
 
-        zonas = new ArrayList<Integer>();
-        llenarZonas();
-
         for(int i=0; i<datos.size();i++){
             if(datos.get(i).get(0)<=cantidad_de_nodos_deseado && datos.get(i).get(1) <= cantidad_de_nodos_deseado && datos.get(i).get(0)>0 && datos.get(i).get(1)>0){
-
-                double zone = datos.get(i).get(0)/cantidad_zonas;
-                int zone_int = (int) zone;
-                int peni = zonas.get(zone_int);
-                int distancia_generada=0;
-                if(peni==4){
-                    distancia_generada = (int) (Math.random() * distancia_maxima/bajo) + 1;
-                }else if(peni==2){
-                    distancia_generada = (int) (Math.random()*(((int)(distancia_maxima/medio_alto) - (int)(distancia_maxima/medio_bajo)))+(int)(distancia_maxima/medio_bajo));
-                }else if(peni==0){
-                    distancia_generada = (int) (Math.random() * (((int)(distancia_maxima) - (int)(distancia_maxima/alto)))+(int)(distancia_maxima/alto));
-                }
-
-                System.out.println(Math.round(datos.get(i).get(0))+" "+Math.round(datos.get(i).get(1))+" "+distancia_generada+" "+peni);
+                System.out.println(Math.round(datos.get(i).get(0))+" "+Math.round(datos.get(i).get(1))+" "+datos.get(i).get(2)+" "+datos.get(i).get(3));
                 contador++;
-            }
-        }
-
-        //Inlcuir arcos para generar grafo fuertamente conexo
-        for(int i=1; i<=this.cantidad_de_nodos_deseado;i++){
-            for(int j=0;j<this.conexiones_por_nodo;j++){
-
-                double zone = i/cantidad_zonas;
-                int zone_int = (int) zone;
-                if(zone_int==zonas.size()){
-                    zone_int--;
-                }
-                int peni = zonas.get(zone_int);
-
-                //double pen = penalizacion_minima + (penalizacion_maxima - penalizacion_minima) * r.nextDouble();
-                int distancia_generada=0;
-                if(peni==4){
-                    distancia_generada = (int) (Math.random() * distancia_maxima/bajo) + 1;
-                }else if(peni==2){
-                    distancia_generada = (int) (Math.random()*(((int)(distancia_maxima/medio_alto) - (int)(distancia_maxima/medio_bajo)))+(int)(distancia_maxima/medio_bajo));
-                }else if(peni==0){
-                    distancia_generada = (int) (Math.random() * (((int)(distancia_maxima) - (int)(distancia_maxima/alto)))+(int)(distancia_maxima/alto));
-                }
-
-                //double dist = distancia_minima + (distancia_maxima - distancia_minima) * r.nextDouble();
-
-                int destino = (int) (Math.random() * cantidad_de_nodos_deseado) + 1;
-                //System.out.println(i+" "+destino+" "+String.format("%.2f", dist)+" "+String.format("%.2f", peni));
-                System.out.println(i+" "+destino+" "+distancia_generada+" "+peni);
-                contador2++;
             }
         }
 
@@ -99,25 +46,6 @@ public class Utilidades {
         System.out.println("Se generaron: "+contador2);
         int total = contador+contador2;
         System.out.println("Total: "+total);
-    }
-
-    private void llenarZonas() {
-        int valor=0;
-        for(int i=0; i<this.cantidad_de_nodos_deseado/cantidad_zonas;i++){
-
-            zonas.add(valor);
-
-            if(valor==0){
-                valor=2;
-            }
-            else if(valor==2){
-                valor=4;
-            }
-            else if(valor==4){
-                valor=0;
-            }
-        }
-
     }
 
     /**
@@ -206,15 +134,15 @@ public class Utilidades {
                 token.nextToken();
                 int distancia = (int)token.nval;
 
-                /*token.nextToken();
-                int penalizacion = (int)token.nval;*/
-
-                int penalizacion = (int) (Math.random() * 100) + 1;
+                token.nextToken();
+                int penalizacion = (int)token.nval;
+                //int penalizacion = (int) (Math.random() * 100) + 1;
 
                 ArrayList<Double> temporal = new ArrayList<Double>();
                 temporal.add((double)j);
                 temporal.add((double)k);
-                temporal.add((double)distancia);
+                //temporal.add((double)distancia);
+                temporal.add((double)(distancia/18));
                 temporal.add((double)penalizacion);
                 datos.add(temporal);
             }
@@ -225,7 +153,7 @@ public class Utilidades {
     }
 
     public static void main(String[] args) throws JMetalException, FileNotFoundException, IOException {
-            Utilidades u = new Utilidades();
+            UtilidadesCombustible u = new UtilidadesCombustible();
             u.GenerarDataSet();
     }
 }

@@ -54,14 +54,14 @@ import java.util.List;
  */
 public class VehicleRoutingStudy2 {
 
-  private static final int INDEPENDENT_RUNS = 25;
+  private static final int INDEPENDENT_RUNS = 30;
 
   public static void main(String[] args) throws IOException {
 
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/vrp_temp_costorelativo.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/ol_temp_combustible.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);
@@ -144,7 +144,7 @@ public class VehicleRoutingStudy2 {
         MutationOperator<PermutationSolution<Integer>> mutation;
         SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-        crossover = new PMXCrossover(0.9) ;
+        crossover = new PMXCrossover(0.8) ;
 
         double mutationProbability = 0.2 ; //NSGAII
         //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
@@ -154,7 +154,7 @@ public class VehicleRoutingStudy2 {
 
         algorithm = new NSGAIIBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
-                .setMaxEvaluations(10000)
+                .setMaxEvaluations(2000)
                 .setPopulationSize(100)
                 .build() ;
 
@@ -169,9 +169,9 @@ public class VehicleRoutingStudy2 {
         MutationOperator<PermutationSolution<Integer>> mutation;
         SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-        crossover = new PMXCrossover(0.9) ;
+        crossover = new PMXCrossover(0.5) ;
 
-        double mutationProbability = 0.2 ;
+        double mutationProbability = 0.5 ;
         //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
         mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
@@ -179,7 +179,7 @@ public class VehicleRoutingStudy2 {
 
         algorithm = new SPEA2Builder<>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
-                .setMaxIterations(250)
+                .setMaxIterations(40)
                 .setPopulationSize(100)
                 .build() ;
 
@@ -207,7 +207,7 @@ public class VehicleRoutingStudy2 {
         referencePoint = new ArrayList<>();
         referencePoint.add(0.0);
         referencePoint.add(0.0);
-        algorithm = new WASFGA<PermutationSolution<Integer>>(problem, 100, 250, crossover, mutation, selection,
+        algorithm = new WASFGA<PermutationSolution<Integer>>(problem, 100, 100, crossover, mutation, selection,
                 new SequentialSolutionListEvaluator<PermutationSolution<Integer>>(),epsilon, referencePoint) ;
 
         algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
