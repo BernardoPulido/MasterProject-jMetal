@@ -10,6 +10,7 @@ import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.multiobjective.VehicleRouting2;
+import org.uma.jmetal.problem.multiobjective.VehicleRouting3;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -55,11 +56,11 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
       problemName = args[0] ;
       referenceParetoFront = args[1] ;
     } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.VehicleRouting2";
+      problemName = "org.uma.jmetal.problem.multiobjective.VehicleRouting3";
       referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
     }
 
-    problem = new VehicleRouting2("/experiments/ol_temp_combustible.txt");
+    problem = new VehicleRouting3("/experiments/ol_temp_combustible.txt");
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
