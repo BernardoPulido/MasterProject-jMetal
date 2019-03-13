@@ -61,7 +61,7 @@ public class VehicleRoutingStudy2 {
     String experimentBaseDirectory = "experiments";
 
     List<ExperimentProblem<PermutationSolution<Integer>>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/ol_temp_combustible.txt"), "VRP"));
+    problemList.add(new ExperimentProblem<>(new VehicleRouting2("/experiments/ol_temp_tres.txt"), "VRP"));
 
     List<ExperimentAlgorithm<PermutationSolution<Integer>, List<PermutationSolution<Integer>>>> algorithmList =
         configureAlgorithmList(problemList);
@@ -171,7 +171,7 @@ public class VehicleRoutingStudy2 {
 
         crossover = new PMXCrossover(0.5) ;
 
-        double mutationProbability = 0.5 ;
+        double mutationProbability = 0.2 ;
         //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
         mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
@@ -179,7 +179,7 @@ public class VehicleRoutingStudy2 {
 
         algorithm = new SPEA2Builder<>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
-                .setMaxIterations(40)
+                .setMaxIterations(60)
                 .setPopulationSize(100)
                 .build() ;
 
@@ -187,6 +187,7 @@ public class VehicleRoutingStudy2 {
       }
 
       //WASFGA
+      /*
       for (int i = 0; i < problemList.size(); i++) {
         PermutationProblem<PermutationSolution<Integer>> problem = (PermutationProblem<PermutationSolution<Integer>>) problemList.get(i).getProblem();
         Algorithm<List<PermutationSolution<Integer>>> algorithm;
@@ -211,7 +212,7 @@ public class VehicleRoutingStudy2 {
                 new SequentialSolutionListEvaluator<PermutationSolution<Integer>>(),epsilon, referencePoint) ;
 
         algorithms.add(new ExperimentAlgorithm<>(algorithm, problemList.get(i), run));
-      }
+      }*/
     }
     return algorithms;
   }
