@@ -76,12 +76,6 @@ public class PermutationPBSwapMutation<T> implements MutationOperator<Permutatio
 
     if ((permutationLength != 0) && (permutationLength != 1)) {
       if (mutationRandomGenerator.getRandomValue() < mutationProbability) {
-
-        System.out.println();
-        for(int i=0; i<permutationLength;i++){
-         System.out.print(solution.getVariableValue(i)+" ");
-        }
-        System.out.println();
         int pos1=0;
         int pos2=0;
 
@@ -104,11 +98,6 @@ public class PermutationPBSwapMutation<T> implements MutationOperator<Permutatio
         solution.setVariableValue(pos1, solution.getVariableValue(pos2));
         solution.setVariableValue(pos2, temp);
 
-        for(int i=0; i<permutationLength;i++){
-          System.out.print(solution.getVariableValue(i)+" ");
-        }
-        System.out.println();
-        System.out.println();
       }
     }
   }
