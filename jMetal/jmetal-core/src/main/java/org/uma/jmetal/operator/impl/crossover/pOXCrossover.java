@@ -9,17 +9,16 @@ import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 
 
 /**
- * This class allows to apply a OX crossover operator using two parent solutions.
+ * This class allows to apply a priority-based OX crossover operator using two parent solutions.
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  * @author Juan J. Durillo
  */
 @SuppressWarnings("serial")
-public class OXCrossover implements
+public class pOXCrossover implements
     CrossoverOperator<PermutationSolution<Integer>> {
   private double crossoverProbability = 1.0;
   private BoundedRandomGenerator<Integer> cuttingPointRandomGenerator ;
@@ -28,21 +27,21 @@ public class OXCrossover implements
   /**
    * Constructor
    */
-  public OXCrossover(double crossoverProbability) {
+  public pOXCrossover(double crossoverProbability) {
 	  this(crossoverProbability, () -> JMetalRandom.getInstance().nextDouble(), (a, b) -> JMetalRandom.getInstance().nextInt(a, b));
   }
 
   /**
    * Constructor
    */
-  public OXCrossover(double crossoverProbability, RandomGenerator<Double> randomGenerator) {
+  public pOXCrossover(double crossoverProbability, RandomGenerator<Double> randomGenerator) {
 	  this(crossoverProbability, randomGenerator, BoundedRandomGenerator.fromDoubleToInteger(randomGenerator));
   }
 
   /**
    * Constructor
    */
-  public OXCrossover(double crossoverProbability, RandomGenerator<Double> crossoverRandomGenerator, BoundedRandomGenerator<Integer> cuttingPointRandomGenerator) {
+  public pOXCrossover(double crossoverProbability, RandomGenerator<Double> crossoverRandomGenerator, BoundedRandomGenerator<Integer> cuttingPointRandomGenerator) {
     if ((crossoverProbability < 0) || (crossoverProbability > 1)) {
       throw new JMetalException("Crossover probability value invalid: " + crossoverProbability) ;
     }
@@ -92,14 +91,28 @@ public class OXCrossover implements
     int permutationLength = parents.get(0).getNumberOfVariables() ;
 
     if (crossoverRandomGenerator.getRandomValue() < probability) {
-      int cuttingPoint1;
-      int cuttingPoint2;
+      int cuttingPoint1=0;
+      int cuttingPoint2=0;
+
+      int cuttingPoint3=0;
+      int cuttingPoint4=0;
 
       // STEP 1: Get two cutting points
-      cuttingPoint1 = cuttingPointRandomGenerator.getRandomValue(0, permutationLength - 1);
-      cuttingPoint2 = cuttingPointRandomGenerator.getRandomValue(0, permutationLength - 1);
-      while (cuttingPoint2 == cuttingPoint1)
-        cuttingPoint2 = cuttingPointRandomGenerator.getRandomValue(0, permutationLength - 1);
+      for(int i=0; i<permutationLength;i++){
+        if(parents.get(0).getVariableValue(i).equals(0)){
+          cuttingPoint1=i;
+        }
+        else if(parents.get(0).getVariableValue(i).equals(permutationLength-1)){
+          cuttingPoint2=i;
+        }
+
+        if(parents.get(1).getVariableValue(i).equals(0)){
+          cuttingPoint3=i;
+        }
+        else if(parents.get(1).getVariableValue(i).equals(permutationLength-1)){
+          cuttingPoint4=i;
+        }
+      }
 
       if (cuttingPoint1 > cuttingPoint2) {
         int swap;
@@ -107,12 +120,20 @@ public class OXCrossover implements
         cuttingPoint1 = cuttingPoint2;
         cuttingPoint2 = swap;
       }
+      if (cuttingPoint3 > cuttingPoint4) {
+        int swap;
+        swap = cuttingPoint3;
+        cuttingPoint3 = cuttingPoint4;
+        cuttingPoint4 = swap;
+      }
 
       //STEP 2: Copiar seccion entre puntos de cruce a hijos
       List<Integer> subset1=new ArrayList<Integer>();
       List<Integer> subset2=new ArrayList<Integer>();
       for(int i=cuttingPoint1; i<=cuttingPoint2;i++){
         subset1.add(parents.get(0).getVariableValue(i));
+      }
+      for(int i=cuttingPoint3; i<=cuttingPoint4;i++){
         subset2.add(parents.get(1).getVariableValue(i));
       }
 
@@ -142,11 +163,11 @@ public class OXCrossover implements
       }
 
       //STEP 4: Realizar mismo procedimiento para otro hijo
-      int point2 = cuttingPoint2+1;
+      int point2 = cuttingPoint4+1;
       if(point2==permutationLength){
         point2=0;
       }
-      int point_add2 = cuttingPoint2+1;
+      int point_add2 = cuttingPoint4+1;
       if(point_add2==permutationLength){
         point_add2=0;
       }
@@ -165,10 +186,8 @@ public class OXCrossover implements
           }
         }
       }
+
     }
-
-
-
     return offspring;
   }
 

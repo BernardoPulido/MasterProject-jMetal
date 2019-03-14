@@ -5,7 +5,9 @@ import org.uma.jmetal.algorithm.multiobjective.mocell.MOCellBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.operator.impl.crossover.OXCrossover;
 import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
+import org.uma.jmetal.operator.impl.crossover.pOXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
@@ -65,7 +67,7 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
     //crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
-    crossover = new PMXCrossover(0.9) ;
+    crossover = new pOXCrossover(0.9) ;
 
     //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
