@@ -13,6 +13,7 @@ import org.uma.jmetal.operator.impl.mutation.*;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.multiobjective.VehicleRouting3;
+import org.uma.jmetal.problem.singleobjective.VehicleRouting;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -59,7 +60,7 @@ public class ANOVARunner extends AbstractAlgorithmRunner {
 
             String referenceParetoFront = "experiments/VehicleRoutingStudy/referenceFronts/VRP.pf" ;
 
-            problem = new VehicleRouting3("/experiments/ol_temp_combustible.txt");
+            problem = new VehicleRouting("/experiments/ol_temp_tres.txt");
 
             //Tamaño de población
             int populationSize = 0;
@@ -133,7 +134,7 @@ public class ANOVARunner extends AbstractAlgorithmRunner {
             selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
             algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
                     .setSelectionOperator(selection)
-                    .setMaxEvaluations(500000)
+                    .setMaxEvaluations(100000)
                     .setPopulationSize(populationSize)
                     .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
                     .build() ;
@@ -142,7 +143,8 @@ public class ANOVARunner extends AbstractAlgorithmRunner {
                     .execute() ;
 
             List<PermutationSolution<Integer>> population = algorithm.getResult() ;
-            long computingTime = algorithmRunner.getComputingTime() ;
+            System.out.println(population.get(0).getObjective(0));
+            /*long computingTime = algorithmRunner.getComputingTime() ;
 
             new SolutionListOutput(population)
                     .setSeparator("\t")
@@ -153,7 +155,7 @@ public class ANOVARunner extends AbstractAlgorithmRunner {
             JMetalLogger.logger.info("Total execution time: " + computingTime + "ms");
             JMetalLogger.logger.info("Random seed: " + JMetalRandom.getInstance().getSeed());
             JMetalLogger.logger.info("Objectives values have been written to file FUN_MOCell.tsv");
-            JMetalLogger.logger.info("Variables values have been written to file VAR_MOCell.tsv");
+            JMetalLogger.logger.info("Variables values have been written to file VAR_MOCell.tsv");*/
 
             //printFinalSolutionSet(population);
             /*if (!referenceParetoFront.equals("")) {

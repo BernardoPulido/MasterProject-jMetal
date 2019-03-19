@@ -21,6 +21,12 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
   protected int [] init_node;
   protected int [] destine_node;
   protected int cantidad_vehiculos = 0;
+  protected double min1 = 195.0;
+  protected double max1 = 4470.0;
+  protected double min2 = 4.0;
+  protected double max2 = 28.0;
+  protected double min3 = 0.0;
+  protected double max3 = 239.0;
 
   public VehicleRouting(String distanceFile) throws IOException {
     readProblem(distanceFile);
@@ -124,11 +130,12 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
           }
         }
 
-        double fitness_all = 0;
+        fitness1 = (fitness1 - min1)/(max1-min1);
+        fitness2 = (fitness2 - min2)/(max2-min2);
+        fitness3 = (fitness3 - min3)/(max3-min3);
+        double fitness_all = (fitness1*(1.0/3.0)) + (fitness2*(1.0/3.0)) + (fitness3*(1.0/3.0));
 
-        solution.setObjective(0, fitness1);
-        solution.setObjective(1, fitness2);
-        solution.setObjective(2, fitness3);
+        solution.setObjective(0, fitness_all);
   }
 
   /**
