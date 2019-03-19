@@ -71,9 +71,9 @@ public class ANOVARunnerMO extends AbstractAlgorithmRunner {
             switch (combinacion.get(0)){
                 case 1: populationSize = 100;
                 break;
-                case 2: populationSize = 150;
+                case 2: populationSize = 144;
                 break;
-                case 3: populationSize = 200;
+                case 3: populationSize = 225;
                 break;
             }
 
@@ -185,7 +185,7 @@ public class ANOVARunnerMO extends AbstractAlgorithmRunner {
     }
 
     /**
-     * i = Tamaño de población (1=100, 2=150, 3=200)
+     * i = Tamaño de población (1=100, 2=144, 3=225)
      * j = Operadores de cruzamiento (1=PMX, 2=OX, 3=pOX)
      * k = Probabilidades de cruzamiento (1 = 0.5, 2 = 0.6, 3 = 0.7, 4 = 0.8, 5 = 0.9)
      * l = Operadores de mutación (1=Swap, 2=pSwap, 3=Insert, 4=Scramble, 5=Inverse, 6=pInverse)
