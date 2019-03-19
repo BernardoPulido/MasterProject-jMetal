@@ -124,6 +124,8 @@ public class VehicleRouting extends AbstractIntegerPermutationProblem {
           }
         }
 
+        double fitness_all = 0;
+
         solution.setObjective(0, fitness1);
         solution.setObjective(1, fitness2);
         solution.setObjective(2, fitness3);
