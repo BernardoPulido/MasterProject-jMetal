@@ -8,6 +8,7 @@ import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.OXCrossover;
 import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
 import org.uma.jmetal.operator.impl.crossover.pOXCrossover;
+import org.uma.jmetal.operator.impl.mutation.PermutationScrambleMutation;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
@@ -67,19 +68,19 @@ public class MOCellThesis2 extends AbstractAlgorithmRunner {
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
     //crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
-    crossover = new pOXCrossover(0.9) ;
+    crossover = new OXCrossover(0.9) ;
 
     //double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    double mutationProbability = 0.2 ;
-    mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
+    double mutationProbability = 0.3 ;
+    mutation = new PermutationScrambleMutation<>(mutationProbability) ;
 
     selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
 
     algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
             .setSelectionOperator(selection)
-            .setMaxEvaluations(500000)
-            .setPopulationSize(100)
+            .setMaxEvaluations(25000)
+            .setPopulationSize(225)
             .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
             .build() ;
 
