@@ -77,7 +77,7 @@ public class MOCellThesisWithMeasuresRunner extends AbstractAlgorithmRunner {
 
     algorithm = new MOCellBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
             .setSelectionOperator(selection)
-            .setMaxEvaluations(25000)
+            .setMaxEvaluations(56250)
             .setPopulationSize(225)
             .setVariant(MOCellBuilder.MOCellVariant.Measures)
             .setArchive(new CrowdingDistanceArchive<PermutationSolution<Integer>>(100))
@@ -126,7 +126,7 @@ public class MOCellThesisWithMeasuresRunner extends AbstractAlgorithmRunner {
         if(counter==1){
           System.out.println("MOCELL") ;
         }
-        System.out.println(counter+" : " + value) ;
+        System.out.println(value) ;
       }
     }
   }

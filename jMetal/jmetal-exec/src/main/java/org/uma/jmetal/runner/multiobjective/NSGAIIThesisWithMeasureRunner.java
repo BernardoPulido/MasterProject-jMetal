@@ -78,7 +78,7 @@ public class NSGAIIThesisWithMeasureRunner extends AbstractAlgorithmRunner {
 
     algorithm = new NSGAIIBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
             .setSelectionOperator(selection)
-            .setMaxEvaluations(10000)
+            .setMaxEvaluations(25000)
             .setPopulationSize(100)
             .setVariant(NSGAIIBuilder.NSGAIIVariant.Measures)
             .build() ;
