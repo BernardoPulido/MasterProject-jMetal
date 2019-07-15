@@ -17,6 +17,7 @@ import java.util.List;
  * @author Juan J. Durillo
  */
 public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPEA2<S>> {
+  public enum SPEA2Variant {SPEA2, SteadyStateSPEA2, Measures}
   /**
    * SPEA2Builder class
    */
@@ -27,6 +28,7 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
   protected MutationOperator<S> mutationOperator;
   protected SelectionOperator<List<S>, S> selectionOperator;
   protected SolutionListEvaluator<S> evaluator;
+  private SPEA2Variant variant;
 
   /**
    * SPEA2Builder constructor
@@ -40,6 +42,8 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
     this.mutationOperator = mutationOperator ;
     selectionOperator = new BinaryTournamentSelection<S>();
     evaluator = new SequentialSolutionListEvaluator<S>();
+
+    this.variant = SPEA2Variant.SPEA2 ;
   }
 
   public SPEA2Builder<S> setMaxIterations(int maxIterations) {
@@ -57,6 +61,12 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
     }
 
     this.populationSize = populationSize;
+
+    return this;
+  }
+
+  public SPEA2Builder<S> setVariant(SPEA2Variant variant) {
+    this.variant = variant;
 
     return this;
   }
@@ -80,10 +90,19 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
   }
 
   public SPEA2<S> build() {
-    SPEA2<S> algorithm = null ;
-    algorithm = new SPEA2<S>(problem, maxIterations, populationSize, crossoverOperator,
-          mutationOperator, selectionOperator, evaluator);
-    
+
+    SPEA2<S> algorithm=null;
+    if (variant.equals(SPEA2Variant.SPEA2)) {
+     algorithm = new SPEA2<S>(problem, maxIterations, populationSize, crossoverOperator,
+              mutationOperator, selectionOperator, evaluator);
+    } else if (variant.equals(SPEA2Variant.SteadyStateSPEA2)) {
+      algorithm = new SPEA2<S>(problem, maxIterations, populationSize, crossoverOperator,
+              mutationOperator, selectionOperator, evaluator);
+    } else if (variant.equals(SPEA2Variant.Measures)) {
+      algorithm = new SPEA2Measures<>(problem, maxIterations, populationSize, crossoverOperator,
+              mutationOperator, selectionOperator, evaluator);
+    }
+
     return algorithm ;
   }
 

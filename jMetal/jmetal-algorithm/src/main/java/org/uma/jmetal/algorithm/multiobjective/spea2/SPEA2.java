@@ -7,10 +7,12 @@ import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.solutionattribute.impl.StrengthRawFitness;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +26,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
   protected List<S> archive;
   protected final StrengthRawFitness<S> strenghtRawFitness = new StrengthRawFitness<S>();
   protected final EnvironmentalSelection<S> environmentalSelection;
+  protected Comparator<S> dominanceComparator;
 
   public SPEA2(Problem<S> problem, int maxIterations, int populationSize,
       CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
@@ -40,6 +43,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
     this.archive = new ArrayList<>(populationSize);
 
     this.evaluator = evaluator;
+    this.dominanceComparator = new DominanceComparator<S>() ;
   }
 
   @Override

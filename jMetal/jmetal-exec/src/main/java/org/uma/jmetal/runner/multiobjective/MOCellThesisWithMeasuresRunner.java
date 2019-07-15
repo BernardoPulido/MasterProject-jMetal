@@ -123,6 +123,9 @@ public class MOCellThesisWithMeasuresRunner extends AbstractAlgorithmRunner {
     private static int counter = 0 ;
     @Override synchronized public void measureGenerated(Double value) {
       if ((counter++ % 1 == 0)) {
+        if(counter==1){
+          System.out.println("MOCELL") ;
+        }
         System.out.println(counter+" : " + value) ;
       }
     }
