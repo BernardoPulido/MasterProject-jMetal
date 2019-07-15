@@ -36,6 +36,7 @@ public class MOCellBuilder<S extends Solution<?>> implements AlgorithmBuilder<MO
   protected SolutionListEvaluator<S> evaluator;
   protected Neighborhood<S> neighborhood ;
   protected BoundedArchive<S> archive ;
+  private MOCellVariant variant;
 
   /**
    * MOCellBuilder constructor
@@ -51,6 +52,7 @@ public class MOCellBuilder<S extends Solution<?>> implements AlgorithmBuilder<MO
     neighborhood = new C9<S>((int)Math.sqrt(populationSize), (int)Math.sqrt(populationSize)) ;
     evaluator = new SequentialSolutionListEvaluator<S>();
     archive = new CrowdingDistanceArchive<>(populationSize) ;
+    this.variant = MOCellVariant.MOCell ;
   }
 
   public MOCellBuilder<S> setMaxEvaluations(int maxEvaluations) {
@@ -84,6 +86,12 @@ public class MOCellBuilder<S extends Solution<?>> implements AlgorithmBuilder<MO
 
     return this;
   }
+  public MOCellBuilder<S> setVariant(MOCellVariant variant) {
+    this.variant = variant;
+
+    return this;
+  }
+
 
   public MOCellBuilder<S> setSelectionOperator(SelectionOperator<List<S>,S> selectionOperator) {
     if (selectionOperator == null) {
@@ -104,9 +112,18 @@ public class MOCellBuilder<S extends Solution<?>> implements AlgorithmBuilder<MO
   }
 
   public MOCell<S> build() {
-    MOCell<S> algorithm = new MOCell<S>(problem, maxEvaluations, populationSize, archive,
-        neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
-    
+    MOCell<S> algorithm=null;
+    if (variant.equals(MOCellVariant.MOCell)) {
+      algorithm = new MOCell<S>(problem, maxEvaluations, populationSize, archive,
+              neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
+    } else if (variant.equals(MOCellVariant.SteadyStateMOCell)) {
+      algorithm = new MOCell<S>(problem, maxEvaluations, populationSize, archive,
+              neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
+    } else if (variant.equals(MOCellVariant.Measures)) {
+      algorithm = new MOCellMeasures<>(problem, maxEvaluations, populationSize, archive,
+              neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
+    }
+
     return algorithm ;
   }
 

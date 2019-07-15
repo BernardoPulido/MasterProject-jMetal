@@ -1,5 +1,6 @@
-package org.uma.jmetal.algorithm.multiobjective.nsgaii;
+package org.uma.jmetal.algorithm.multiobjective.mocell;
 
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
 import org.uma.jmetal.measure.Measurable;
 import org.uma.jmetal.measure.MeasureManager;
 import org.uma.jmetal.measure.impl.BasicMeasure;
@@ -10,13 +11,16 @@ import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.qualityindicator.impl.Spread;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.archive.BoundedArchive;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
+import org.uma.jmetal.util.neighborhood.Neighborhood;
 import org.uma.jmetal.util.point.PointSolution;
 import org.uma.jmetal.util.solutionattribute.Ranking;
 import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
@@ -28,7 +32,7 @@ import java.util.List;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 @SuppressWarnings("serial")
-public class NSGAIIMeasures<S extends Solution<?>> extends NSGAII<S> implements Measurable {
+public class MOCellMeasures<S extends Solution<?>> extends MOCell<S> implements Measurable {
   protected CountingMeasure evaluations ;
   protected DurationMeasure durationMeasure ;
   protected SimpleMeasureManager measureManager ;
@@ -42,11 +46,12 @@ public class NSGAIIMeasures<S extends Solution<?>> extends NSGAII<S> implements 
   /**
    * Constructor
    */
-  public NSGAIIMeasures(Problem<S> problem, int maxIterations, int populationSize,
+  public MOCellMeasures(Problem<S> problem, int maxEvaluations, int populationSize, BoundedArchive<S> archive,
+                        Neighborhood<S> neighborhood,
                         CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-                        SelectionOperator<List<S>, S> selectionOperator, Comparator<S> dominanceComparator, SolutionListEvaluator<S> evaluator) {
-    super(problem, maxIterations, populationSize, crossoverOperator, mutationOperator,
-        selectionOperator, dominanceComparator, evaluator) ;
+                        SelectionOperator<List<S>, S> selectionOperator, SolutionListEvaluator<S> evaluator) {
+    super(problem, maxEvaluations, populationSize, archive, neighborhood, crossoverOperator, mutationOperator,
+        selectionOperator, evaluator) ;
 
     referenceFront = new ArrayFront() ;
 
@@ -75,6 +80,7 @@ public class NSGAIIMeasures<S extends Solution<?>> extends NSGAII<S> implements 
        */
       //hypervolumeValue.push(new Spread<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));
       //hypervolumeValue.push(new Spread<S>(referenceFront).evaluate(getPopulation()));
+
     }
   }
 
@@ -131,11 +137,11 @@ public class NSGAIIMeasures<S extends Solution<?>> extends NSGAII<S> implements 
   }
 
   @Override public String getName() {
-    return "NSGAIIM" ;
+    return "MOCEllM" ;
   }
 
   @Override public String getDescription() {
-    return "Nondominated Sorting Genetic Algorithm version II. Version using measures" ;
+    return "MOCell Version using measures" ;
   }
 
   public void setReferenceFront(Front referenceFront) {
